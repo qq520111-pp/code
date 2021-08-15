@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromise = require('fs/promises')
 const path = require('path');
 /***
  * 1.读取文件所有内容
@@ -88,3 +89,28 @@ function createDir(url, options = null, callback = () => {}) {
 }
 
 readFile(startReadDir("./images/"))
+
+/***
+ * fsPromis通过promise封装一层
+ */
+const {
+    opendir,
+    open,
+    access,
+    chmod
+} = fsPromise;
+/**
+ * chmod 设置文件权限
+ * access 检查文件是否存在，以及 Node.js 是否有权限访问。
+ * @param {string} 参数一
+ * @param {string | integer} 参数二mode fs.constants文件的描述变量
+ */
+(async function () {
+    await chmod('./images/480X762.jpg', fs.constants.R_OK);
+    try {
+        const res = await access('./images/480X762.jpg', fs.constants.R_OK | fs.constants.W_OK);
+        console.log(res);
+    } catch (err) {
+        console.error(err);
+    }
+})()
