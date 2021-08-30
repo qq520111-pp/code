@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app" v-count-timer="3600">{{count}}</div>
+  <script src="./directives/directive.js"></script>
+  <script>
+    Vue.use(directive)
+    let vm = new Vue({
+      data() {
+        return {
+          count: 123
+        }
+      }
+    })
+    vm.$mount("#app")
+  </script>
+</body>
+
+</html>
