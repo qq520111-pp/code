@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mvc</title>
+    <style>
+        .contain {
+            width: 200px;
+            text-align: center;
+            margin: 100px auto 0;
+        }
+
+        .money {
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .flex div {
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            width: 100px;
+            height: 50px;
+            line-height: 50px;
+            background-color: rosybrown;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contain">
+        <div class="money">0rmb</div>
+        <div class="flex">
+            <div class="jian">-</div>
+            <div class="jia">+</div>
+        </div>
+    </div>
+    <script>
+        /**
+         * @descriptions 通过观察者 - 策略模式实现
+         * 
+         * */
+
+        class Watcher {
+            constructor(options) {
+                this.subs = []
+            }
+            register(view) {
+                this.subs.push(view)
+            }
+            notify() {
+                this.subs.forEach(view => {
+                    if (typeof view === 'function') {
+                        view()
+                    } else {
+                        throw new Error(view, " is not a function")
+                    }
+                })
+            }
+        }
+        const watch = new Watcher()
+
+        // 业务数据
+        var M = {
+            value: 0,
+            getVal() {
+                return this.value
+            },
+            add(v) {
+                if (this.value < 100) this.value += v;
+            },
+            sub(v) {
+                if (this.value > 0) this.value -= v;
+            }
+        }
+
+        // 视图
+        var V = {
+            jian: document.getElementsByClassName("jian")[0],
+            jia: document.getElementsByClassName("jia")[0],
+            money: document.getElementsByClassName("money")[0],
+            update(target, value) {
+                target.innerHTML = value
+            },
+            init(C) {
+                this.jia.addEventListener("click", C.add)
+                this.jian.addEventListener("click", C.sub)
+            }
+        }
+
+        // 控制器
+        var C = {
+            init() {
+                watch.register(() => {
+                    V.update(V.money, M.value)
+                })
+                watch.notify()
+                
+                V.init(this)
+            },
+            add() {
+                M.add(1)
+                watch.notify()
+            },
+            sub() {
+                M.sub(1)
+                watch.notify()
+            }
+        }
+        C.init()
+    </script>
+</body>
+
+</html>

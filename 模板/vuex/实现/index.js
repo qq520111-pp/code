@@ -67,7 +67,7 @@ function mapState(stateArr) {
     const mapStates = {}
     stateArr.forEach(stateName => {
         mapStates[stateName] = function () {
-            return this.$store.state[stateName]
+            return this.$store1.state[stateName]
         }
     })
     return mapStates

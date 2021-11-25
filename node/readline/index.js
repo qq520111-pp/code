@@ -24,3 +24,4 @@ readline.question(`你叫什么名字?`, name => {
         })
     })
 })
+
